@@ -5,13 +5,22 @@ import { useEffect, useState } from 'react';
 import type { ApiPaginatedResponse } from '@/shared/api';
 import { useUsersListDesp } from '../deps';
 import { useDebounced } from '@/shared/lib/hooks/useDebounced';
+import { useUrlQuery } from '@/shared/lib/hooks/useUrlQuery';
 
 export function UsersList() {
   const { getUsers } = useUsersListDesp();
+  const { queryParams, syncWithState } = useUrlQuery();
 
   const [usersResponse, setUsersResponse] = useState<ApiPaginatedResponse<UserType, 'users'> | null>(null);
-  const [paginationState, setPaginationState] = useState({ skip: 0, limit: 10 });
-  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Initialize state from URL parameters
+  const [paginationState, setPaginationState] = useState(() => {
+    const limit = queryParams.limit || 10;
+    const skip = queryParams.page ? (queryParams.page - 1) * limit : 0;
+    return { skip, limit };
+  });
+  
+  const [searchQuery, setSearchQuery] = useState(() => queryParams.search || '');
 
   const [debouncedPagination] = useDebounced(paginationState, 1000);
   const [debouncedSearch] = useDebounced(searchQuery, 1000);
@@ -61,6 +70,15 @@ export function UsersList() {
   const handlePageChange = (newState: { skip: number; limit: number }) => {
     setPaginationState(newState);
   };
+
+  // Sync state with URL when it changes
+  useEffect(() => {
+    syncWithState({
+      skip: paginationState.skip,
+      limit: paginationState.limit,
+      search: searchQuery
+    });
+  }, [paginationState, searchQuery, syncWithState]);
 
   if (error) {
     return (
