@@ -1,7 +1,7 @@
-import MainPage from '@/pages/main'
+import { UsersPage } from '@/pages/users'
 
 function App() {
-  return <MainPage />
+  return <UsersPage />
 }
 
 export default App
