@@ -10,7 +10,7 @@ export function UsersPage() {
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-8">Users list</h1>
         </div>
-        <div>
+        <div className="pb-4">
           <UsersList />
         </div>
       </PageLayout>

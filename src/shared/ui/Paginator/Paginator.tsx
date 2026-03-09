@@ -12,6 +12,41 @@ const ChevronRightIcon = () => (
   </svg>
 )
 
+const PageButton = ({ 
+  page, 
+  currentPage, 
+  onClick, 
+  disabled = false 
+}: { 
+  page: number | string; 
+  currentPage: number; 
+  onClick: () => void; 
+  disabled?: boolean;
+}) => {
+  if (page === '...') {
+    return (
+      <span key={`ellipsis-${page}`} className="px-3 py-2 text-sm font-medium text-gray-500">
+        ...
+      </span>
+    )
+  }
+
+  return (
+    <button
+      key={page}
+      onClick={onClick}
+      disabled={disabled}
+      className={`px-3 py-2 text-sm font-medium rounded-md cursor-pointer disabled:cursor-not-allowed ${
+        page === currentPage
+          ? 'bg-blue-600 text-white md:visible'
+          : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hidden md:block'
+      }`}
+    >
+      {page}
+    </button>
+  )
+}
+
 export function Paginator({
   limit,
   skip,
@@ -36,7 +71,7 @@ export function Paginator({
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      onPageChange( {
+      onPageChange({
         skip: skip + limit,
         limit,
         oldPage: currentPage,
@@ -106,15 +141,13 @@ export function Paginator({
     return pages
   }
 
-  if (totalPages <= 1) return null
-
   return (
-    <div className={`flex items-center justify-between ${className}`}>
-      <div className="text-sm text-gray-200">
-        Показано {skip + 1}-{Math.min(skip + limit, total)} из {total} записей
+    <div className={`flex items-center justify-between md:flex-row flex-col ${className}`}>
+      <div className="text-sm text-gray-200 md:mr-4">
+        Showing {skip + 1}-{Math.min(skip + limit, total)} of {total} items
       </div>
 
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 md:mt-0 mt-2">
         <button
           onClick={handlePrevious}
           disabled={currentPage === 1}
@@ -125,30 +158,19 @@ export function Paginator({
 
         <div className="flex space-x-1">
           {getVisiblePages().map((page, index) => (
-            page === '...' ? (
-              <span key={`ellipsis-${index}`} className="px-3 py-2 text-sm font-medium text-gray-500">
-                ...
-              </span>
-            ) : (
-              <button
-                key={page}
-                onClick={() => handlePageClick(page as number)}
-                className={`px-3 py-2 text-sm font-medium rounded-md cursor-pointer disabled:cursor-not-allowed ${
-                  page === currentPage
-                    ? 'bg-blue-600 text-white'
-                    : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
-                }`}
-                disabled={page === currentPage}
-              >
-                {page}
-              </button>
-            )
+            <PageButton
+              key={typeof page === 'number' ? page : `ellipsis-${page}-${index}`}
+              page={page}
+              currentPage={currentPage}
+              onClick={() => typeof page === 'number' && handlePageClick(page)}
+              disabled={page === currentPage}
+            />
           ))}
         </div>
 
         <button
           onClick={handleNext}
-          disabled={currentPage === totalPages}
+          disabled={!totalPages || currentPage === totalPages}
           className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ChevronRightIcon />

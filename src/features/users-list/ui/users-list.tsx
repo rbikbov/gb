@@ -88,37 +88,44 @@ export function UsersList() {
     );
   }
 
+  const searchNoData = debouncedSearch && !loading && !usersResponse?.users?.length;
+
+  const hasData = Array.isArray(usersResponse?.users) && usersResponse.users.length > 0;
+
   return (
     <div className="relative min-h-[80vh]">
-      <div className='p-4'>
-        <SearchInput value={searchQuery} onChange={handleSearchChange} />
+      <div className='py-4 sticky top-0 z-10 bg-neutral-800'>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <SearchInput 
+            className="col-span-full xl:col-span-1"
+            value={searchQuery} 
+            onChange={handleSearchChange} 
+          />
+
+          <Paginator
+            className="col-span-full xl:col-span-3"
+            limit={paginationState.limit}
+            skip={paginationState.skip}
+            total={usersResponse?.total || 0}
+            onPageChange={handlePageChange}
+            showAllPages={false}
+          />
+        </div>
       </div>
 
-      {debouncedSearch && !loading && !usersResponse?.users?.length && (
+      {searchNoData && (
         <div className='p-4 text-center'>
           <p className="text-white-500">No data</p>
         </div>
       )}
 
-      {Array.isArray(usersResponse?.users) && usersResponse.users.length > 0 && (
-        <div className='grid grid-cols-5'>
+      {hasData && (
+        <div className='mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch'>
           {usersResponse.users.map((user) => (
-            <div className='p-4' key={user.id}>
-              <UserCard user={user} />
-            </div>
+            <UserCard key={user.id} user={user} />
           ))}
         </div>
       )}
-
-      <div className='p-4'>
-        <Paginator
-          limit={paginationState.limit}
-          skip={paginationState.skip}
-          total={usersResponse?.total || 0}
-          onPageChange={handlePageChange}
-          showAllPages={true}
-        />
-      </div>
 
       <Loader isLoading={loading} size="lg" />
     </div>
