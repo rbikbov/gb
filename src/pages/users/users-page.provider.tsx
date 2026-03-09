@@ -1,4 +1,5 @@
 import { usersListDepsContext } from "@/features/users-list";
+import { UsersRepository } from "@/entities/user/model/users.repository";
 
 export const UsersPageProvider = ({
   children,
@@ -8,6 +9,7 @@ export const UsersPageProvider = ({
   return (
     <usersListDepsContext.Provider
       value={{
+        getUsers: UsersRepository.getUsers,
       }}
     >
       {children}

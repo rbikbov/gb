@@ -6,10 +6,10 @@ interface UserProps {
 
 export function UserCard({ user }: UserProps) {
   return (
-    <div className="border border-gray-300 rounded-lg p-4 m-4 max-w-md bg-white shadow-md">
+    <div className="border border-gray-300 rounded-lg p-4 max-w-md bg-white shadow-md">
       <div className="flex items-center gap-3 mb-4">
-        <img 
-          src={user.image} 
+        <img
+          src={user.image}
           alt={`${user.firstName} ${user.lastName}`}
           className="w-16 h-16 rounded-full object-cover"
         />
@@ -18,7 +18,7 @@ export function UserCard({ user }: UserProps) {
         </h3>
       </div>
       <div className="space-y-2">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 min-h-10">
           <span className="font-medium text-gray-900">Email:</span> {user.email}
         </p>
         <p className="text-sm text-gray-600">
@@ -30,10 +30,10 @@ export function UserCard({ user }: UserProps) {
         <p className="text-sm text-gray-600">
           <span className="font-medium text-gray-900">Role:</span> {user.role}
         </p>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 min-h-10">
           <span className="font-medium text-gray-900">Company:</span> {user.company.name}
         </p>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 min-h-10">
           <span className="font-medium text-gray-900">Position:</span> {user.company.title}
         </p>
       </div>
