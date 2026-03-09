@@ -1,6 +1,6 @@
-import reactLogo from '../../shared/assets/react.svg'
+import reactLogo from '@/shared/assets/react.svg'
 import viteLogo from '/vite.svg'
-import { Counter } from '../../features/counter'
+import { Counter } from '@/features/counter'
 import './MainPage.css'
 
 function MainPage() {
