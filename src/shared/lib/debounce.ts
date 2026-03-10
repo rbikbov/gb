@@ -10,7 +10,7 @@ export function debounce<T extends (...args: any[]) => void>(
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
-    
+
     timeoutId = setTimeout(() => {
       func.apply(this, args);
     }, delay);
