@@ -41,6 +41,7 @@ const PageButton = ({
           ? 'bg-blue-600 text-white md:visible'
           : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hidden md:block'
       }`}
+      aria-label={`Page ${page}`}
     >
       {page}
     </button>
@@ -152,6 +153,7 @@ export function Paginator({
           onClick={handlePrevious}
           disabled={currentPage === 1}
           className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Previous"
         >
           <ChevronLeftIcon />
         </button>
@@ -172,6 +174,7 @@ export function Paginator({
           onClick={handleNext}
           disabled={!totalPages || currentPage === totalPages}
           className="p-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Next"
         >
           <ChevronRightIcon />
         </button>

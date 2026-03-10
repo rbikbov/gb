@@ -81,6 +81,7 @@ npm run test:run
 
 #### ✅ UI Компоненты
 - **`SearchInput`** - рендер, onChange, disabled
+- **`Paginator`** - пагинация, переключение страниц
 
 ## 🛠️ Доступные скрипты
 
