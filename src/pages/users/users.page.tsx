@@ -8,7 +8,7 @@ export function UsersPage() {
     <UsersPageProvider>
       <PageLayout>
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-8">Users list</h1>
+          <h1 className="text-4xl font-bold mb-8">Users</h1>
         </div>
         <div className="pb-4">
           <UsersList />

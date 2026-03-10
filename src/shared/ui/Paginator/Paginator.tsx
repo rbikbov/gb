@@ -12,15 +12,15 @@ const ChevronRightIcon = () => (
   </svg>
 )
 
-const PageButton = ({ 
-  page, 
-  currentPage, 
-  onClick, 
-  disabled = false 
-}: { 
-  page: number | string; 
-  currentPage: number; 
-  onClick: () => void; 
+const PageButton = ({
+  page,
+  currentPage,
+  onClick,
+  disabled = false
+}: {
+  page: number | string;
+  currentPage: number;
+  onClick: () => void;
   disabled?: boolean;
 }) => {
   if (page === '...') {

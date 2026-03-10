@@ -6,20 +6,31 @@ import type { ApiPaginatedResponse } from '@/shared/api';
 import { useUsersListDesp } from '../deps';
 import { useDebounced } from '@/shared/lib/hooks/useDebounced';
 import { useUrlQuery } from '@/shared/lib/hooks/useUrlQuery';
+import { UsersTable } from './users-table';
+
+
+const ViewMode = {
+  GRID: 'grid',
+  TABLE: 'table',
+} as const;
+
+type ViewModeType = typeof ViewMode[keyof typeof ViewMode];
 
 export function UsersList() {
   const { getUsers } = useUsersListDesp();
   const { queryParams, syncWithState } = useUrlQuery();
 
+  const [viewMode, setViewMode] = useState<ViewModeType>(ViewMode.GRID);
+
   const [usersResponse, setUsersResponse] = useState<ApiPaginatedResponse<UserType, 'users'> | null>(null);
-  
+
   // Initialize state from URL parameters
   const [paginationState, setPaginationState] = useState(() => {
     const limit = queryParams.limit || 10;
     const skip = queryParams.page ? (queryParams.page - 1) * limit : 0;
     return { skip, limit };
   });
-  
+
   const [searchQuery, setSearchQuery] = useState(() => queryParams.search || '');
 
   const [debouncedPagination] = useDebounced(paginationState, 1000);
@@ -82,7 +93,7 @@ export function UsersList() {
 
   if (error) {
     return (
-      <div className='p-4 text-center'>
+      <div className="p-4 text-center">
         <p className="text-red-500">Error: {error.message}</p>
       </div>
     );
@@ -93,41 +104,61 @@ export function UsersList() {
   const hasData = Array.isArray(usersResponse?.users) && usersResponse.users.length > 0;
 
   return (
-    <div className="relative min-h-[80vh]">
-      <div className='py-4 sticky top-0 z-10 bg-neutral-800'>
+    <div className="min-h-[80vh]">
+      <div className="py-4 sticky top-0 z-51 bg-neutral-800">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          <SearchInput 
+          <SearchInput
             className="col-span-full xl:col-span-1"
-            value={searchQuery} 
-            onChange={handleSearchChange} 
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
 
-          <Paginator
-            className="col-span-full xl:col-span-3"
-            limit={paginationState.limit}
-            skip={paginationState.skip}
-            total={usersResponse?.total || 0}
-            onPageChange={handlePageChange}
-            showAllPages={false}
-          />
+          <div
+            className="col-span-full xl:col-span-3 flex justify-between items-center"
+          >
+            <select
+              className="bg-neutral-800 cursor-pointer p-1.5"
+              value={viewMode}
+              onChange={(e) => setViewMode(e.target.value as ViewModeType)}
+            >
+              <option value={ViewMode.GRID}>Grid</option>
+              <option value={ViewMode.TABLE}>Table</option>
+            </select>
+
+            <Paginator
+              limit={paginationState.limit}
+              skip={paginationState.skip}
+              total={usersResponse?.total || 0}
+              onPageChange={handlePageChange}
+              showAllPages={false}
+            />
+          </div>
         </div>
       </div>
 
-      {searchNoData && (
-        <div className='p-4 text-center'>
-          <p className="text-white-500">No data</p>
-        </div>
-      )}
+      <div className="relative min-h-[100px]">
+        {searchNoData && (
+          <div className="p-8 text-center">
+            <p className="text-white-500">No data</p>
+          </div>
+        )}
 
-      {hasData && (
-        <div className='mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch'>
-          {usersResponse.users.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))}
-        </div>
-      )}
+        {hasData && viewMode === ViewMode.GRID && (
+          <div className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-stretch">
+            {usersResponse.users.map((user) => (
+              <UserCard key={user.id} user={user} />
+            ))}
+          </div>
+        )}
 
-      <Loader isLoading={loading} size="lg" />
+        {hasData && viewMode === ViewMode.TABLE && (
+          <div className='mt-4 table-container'>
+            <UsersTable users={usersResponse.users} />
+          </div>
+        )}
+
+        <Loader isLoading={loading} size="lg" />
+      </div>
     </div>
   );
 }

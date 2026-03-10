@@ -56,7 +56,7 @@ export function useUrlQuery(): UseUrlQueryReturn {
   // Sync component state with URL
   const syncWithState = useCallback((state: { skip: number; limit: number; search?: string }) => {
     const page = Math.floor(state.skip / state.limit) + 1
-    
+  
     updateQueryParams({
       page: page > 1 ? page : undefined, // Don't store page 1
       limit: state.limit !== 10 ? state.limit : undefined, // Don't store default limit

@@ -19,12 +19,12 @@ export function Loader({
 
   return (
     <div className={`
-      absolute inset-0 bg-white/50
+      absolute inset-0 backdrop-blur
       flex items-center justify-center
       z-50 pointer-events-none
       ${className}
     `}>
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-2 sticky top-45 bottom-45">
         <div className={`
           animate-spin rounded-full border-2 border-gray-300
           border-t-blue-600

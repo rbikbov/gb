@@ -18,6 +18,7 @@ export function UserCard({ user }: UserProps) {
           src={user.image}
           alt={`${user.firstName} ${user.lastName}`}
           className="w-16 h-16 rounded-full object-cover"
+          loading="lazy"
         />
         <h3 className="text-lg font-semibold text-gray-900">
           {user.firstName} {user.lastName}
