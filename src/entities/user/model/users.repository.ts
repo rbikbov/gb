@@ -1,5 +1,6 @@
-import type { ApiPaginatedResponse } from "@/shared/api";
-import type { User } from "./types";
+import { UsersResponseDtoSchema } from '@/shared/api/users';
+import { mapUserDtoToModel } from './users.mapper';
+import type { UsersResponse } from './types';
 
 export interface GetUsersParams {
   limit?: number;
@@ -8,14 +9,12 @@ export interface GetUsersParams {
   signal?: AbortSignal;
 }
 
-export type GetUsersResponse = ApiPaginatedResponse<User, 'users'>
-
 export interface UsersRepository {
-  getUsers: (params: GetUsersParams) => Promise<GetUsersResponse>;
+  getUsers: (params: GetUsersParams) => Promise<UsersResponse>;
 }
 
 export const UsersRepository: UsersRepository = {
-  getUsers: ({
+  getUsers: async ({
     limit = 10,
     skip = 0,
     search,
@@ -36,7 +35,21 @@ export const UsersRepository: UsersRepository = {
       url.searchParams.append('q', search)
     }
 
-    return fetch(url.toString(), { signal })
-      .then((response) => response.json())
+    const response = await fetch(url.toString(), { signal })
+    const rawData = await response.json();
+
+    const result = UsersResponseDtoSchema.safeParse(rawData);
+
+    if (!result.success) {
+      // e.g. log to sentry
+      throw new Error('Data validation failed');
+    }
+
+    return {
+      users: result.data.users.map(mapUserDtoToModel),
+      total: result.data.total,
+      skip: result.data.skip,
+      limit: result.data.limit,
+    }
   }
 }

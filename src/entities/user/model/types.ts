@@ -67,7 +67,7 @@ export interface User {
   ssn: string
   userAgent: string
   crypto: Crypto
-  role: 'moderator' | 'user'
+  role: 'moderator' | 'user' | 'admin'
 }
 
 export type UsersResponse = ApiPaginatedResponse<User, 'users'>
