@@ -79,6 +79,8 @@ npm run test:run
 - **`debounce`** - проверка задержки вызовов
 - **`useUrlQuery`** - управление URL параметрами
 
+#### ✅ UI Компоненты
+- **`SearchInput`** - рендер, onChange, disabled
 
 ## 🛠️ Доступные скрипты
 
