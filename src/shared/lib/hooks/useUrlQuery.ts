@@ -9,6 +9,7 @@ export function useUrlQuery() {
   const getSnapshot = () => window.location.search;
 
   const search = useSyncExternalStore(subscribe, getSnapshot);
+
   const searchParams = new URLSearchParams(search);
 
   const queryParams = {
