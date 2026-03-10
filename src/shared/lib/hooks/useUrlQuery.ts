@@ -1,89 +1,40 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useSyncExternalStore } from 'react';
 
-interface UrlQueryParams {
-  page?: number
-  limit?: number
-  search?: string
-}
+export function useUrlQuery() {
+  const subscribe = useCallback((callback: () => void) => {
+    window.addEventListener('popstate', callback);
+    return () => window.removeEventListener('popstate', callback);
+  }, []);
 
-interface UseUrlQueryReturn {
-  queryParams: UrlQueryParams
-  updateQueryParams: (params: Partial<UrlQueryParams>) => void
-  syncWithState: (state: { skip: number; limit: number; search?: string }) => void
-}
+  const getSnapshot = () => window.location.search;
 
-export function useUrlQuery(): UseUrlQueryReturn {
-  // Initialize with parsed query params from URL
-  const [queryParams, setQueryParams] = useState<UrlQueryParams>(() => {
-    const searchParams = new URLSearchParams(window.location.search)
-    const page = searchParams.get('page')
-    const limit = searchParams.get('limit')
-    const search = searchParams.get('search')
+  const search = useSyncExternalStore(subscribe, getSnapshot);
+  const searchParams = new URLSearchParams(search);
 
-    return {
-      page: page ? parseInt(page, 10) : undefined,
-      limit: limit ? parseInt(limit, 10) : undefined,
-      search: search || undefined
-    }
-  })
+  const queryParams = {
+    page: Number(searchParams.get('page')) || 1,
+    limit: Number(searchParams.get('limit')) || 10,
+    search: searchParams.get('search') || '',
+  };
 
-  // Update query parameters in URL
-  const updateQueryParams = useCallback((params: Partial<UrlQueryParams>) => {
-    const url = new URL(window.location.href)
-    const searchParams = new URLSearchParams(url.search)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateQueryParams = useCallback((params: Record<string, any>) => {
+    const url = new URL(window.location.href);
+    const newParams = new URLSearchParams(url.search);
 
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        searchParams.set(key, value.toString())
+      if (value !== undefined && value !== null && value !== '') {
+        newParams.set(key, value.toString());
       } else {
-        searchParams.delete(key)
+        newParams.delete(key);
       }
-    })
+    });
 
-    // Update URL without page reload
-    const newUrl = `${url.pathname}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
-    window.history.pushState({}, '', newUrl)
+    const newUrl = `${url.pathname}${newParams.toString() ? '?' + newParams.toString() : ''}`;
+    window.history.pushState({}, '', newUrl);
+    // generate event manually to update useSyncExternalStore
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }, []);
 
-    // Update local state
-    const newSearchParams = new URLSearchParams(newUrl.split('?')[1] || '')
-    setQueryParams({
-      page: newSearchParams.get('page') ? parseInt(newSearchParams.get('page')!, 10) : undefined,
-      limit: newSearchParams.get('limit') ? parseInt(newSearchParams.get('limit')!, 10) : undefined,
-      search: newSearchParams.get('search') || undefined
-    })
-  }, [])
-
-  // Sync component state with URL
-  const syncWithState = useCallback((state: { skip: number; limit: number; search?: string }) => {
-    const page = Math.floor(state.skip / state.limit) + 1
-  
-    updateQueryParams({
-      page: page > 1 ? page : undefined, // Don't store page 1
-      limit: state.limit !== 10 ? state.limit : undefined, // Don't store default limit
-      search: state.search || undefined
-    })
-  }, [updateQueryParams])
-
-  // Listen for browser back/forward navigation
-  useEffect(() => {
-    const handlePopState = () => {
-      const searchParams = new URLSearchParams(window.location.search)
-      setQueryParams({
-        page: searchParams.get('page') ? parseInt(searchParams.get('page')!, 10) : undefined,
-        limit: searchParams.get('limit') ? parseInt(searchParams.get('limit')!, 10) : undefined,
-        search: searchParams.get('search') || undefined
-      })
-    }
-
-    window.addEventListener('popstate', handlePopState)
-    return () => {
-      window.removeEventListener('popstate', handlePopState)
-    }
-  }, [])
-
-  return {
-    queryParams,
-    updateQueryParams,
-    syncWithState
-  }
+  return { queryParams, updateQueryParams };
 }

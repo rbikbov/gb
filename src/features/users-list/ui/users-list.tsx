@@ -1,13 +1,13 @@
 import type { User as UserType } from '@/entities/user/model/types';
 import { UserCard } from '@/entities/user';
-import { Paginator, Loader, SearchInput } from '@/shared/ui';
-import { useEffect, useState } from 'react';
+import { Loader } from '@/shared/ui';
+import { useCallback, useEffect, useState } from 'react';
 import type { ApiPaginatedResponse } from '@/shared/api';
 import { useUsersListDesp } from '../deps';
-import { useDebounced } from '@/shared/lib/hooks/useDebounced';
 import { useUrlQuery } from '@/shared/lib/hooks/useUrlQuery';
 import { UsersTable } from './users-table';
-
+import { UsersSearch } from './users-search';
+import { UsersPaginator } from './users-paginator';
 
 const ViewMode = {
   GRID: 'grid',
@@ -18,26 +18,22 @@ type ViewModeType = typeof ViewMode[keyof typeof ViewMode];
 
 export function UsersList() {
   const { getUsers } = useUsersListDesp();
-  const { queryParams, syncWithState } = useUrlQuery();
-
-  const [viewMode, setViewMode] = useState<ViewModeType>(ViewMode.GRID);
+  const { queryParams, updateQueryParams } = useUrlQuery();
 
   const [usersResponse, setUsersResponse] = useState<ApiPaginatedResponse<UserType, 'users'> | null>(null);
-
-  // Initialize state from URL parameters
-  const [paginationState, setPaginationState] = useState(() => {
-    const limit = queryParams.limit || 10;
-    const skip = queryParams.page ? (queryParams.page - 1) * limit : 0;
-    return { skip, limit };
-  });
-
-  const [searchQuery, setSearchQuery] = useState(() => queryParams.search || '');
-
-  const [debouncedPagination] = useDebounced(paginationState, 1000);
-  const [debouncedSearch] = useDebounced(searchQuery, 1000);
-
-  const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [viewMode, setViewMode] = useState<ViewModeType>(ViewMode.GRID);
+
+  const { page, limit, search } = queryParams;
+  const skip = (page - 1) * limit;
+
+  if (usersResponse?.total && skip > usersResponse.total) {
+    updateQueryParams({
+      search,
+      page: 1,
+    });
+  }
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -45,15 +41,13 @@ export function UsersList() {
     const loadData = async () => {
       setLoading(true);
       setError(null);
-
       try {
         const response = await getUsers({
-          skip: debouncedPagination.skip,
-          limit: debouncedPagination.limit,
-          search: debouncedSearch,
+          skip,
+          limit,
+          search,
           signal: abortController.signal,
         });
-
         setUsersResponse(response);
       } catch (err) {
         if (err instanceof Error && err.name !== 'AbortError') {
@@ -67,54 +61,47 @@ export function UsersList() {
     };
 
     loadData();
+    return () => abortController.abort();
+  }, [skip, limit, search, getUsers]);
 
-    return () => {
-      abortController.abort();
-    };
-  }, [debouncedPagination, debouncedSearch, getUsers]);
-
-  const handleSearchChange = (value: string) => {
-    setSearchQuery(value);
-    setPaginationState((prev) => ({ ...prev, skip: 0 }));
-  };
-
-  const handlePageChange = (newState: { skip: number; limit: number }) => {
-    setPaginationState(newState);
-  };
-
-  // Sync state with URL when it changes
-  useEffect(() => {
-    syncWithState({
-      skip: paginationState.skip,
-      limit: paginationState.limit,
-      search: searchQuery
+  const handleSearchChange = useCallback((value: string) => {
+    updateQueryParams({
+      search: value,
+      page: undefined
     });
-  }, [paginationState, searchQuery, syncWithState]);
+  }, [updateQueryParams]);
+
+  const handlePaginationChange = useCallback((newState: { skip: number; limit: number }) => {
+    const newPage = Math.floor(newState.skip / newState.limit) + 1;
+    updateQueryParams({
+      page: newPage > 1 ? newPage : undefined,
+      limit: newState.limit !== 10 ? newState.limit : undefined
+    });
+  }, [updateQueryParams]);
 
   if (error) {
     return (
-      <div className="p-4 text-center">
+      <div className="p-8 text-center">
         <p className="text-red-500">Error: {error.message}</p>
       </div>
     );
   }
 
-  const searchNoData = debouncedSearch && !loading && !usersResponse?.users?.length;
+  const searchNoData = queryParams.search && !loading && !usersResponse?.users?.length;
 
   const hasData = Array.isArray(usersResponse?.users) && usersResponse.users.length > 0;
-
   return (
     <div className="min-h-[80vh]">
-      <div className="py-4 sticky top-0 z-51 bg-neutral-800">
+      <div className="py-4 sticky top-0 z-50 bg-neutral-800">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          <SearchInput
+          <UsersSearch
             className="col-span-full xl:col-span-1"
-            value={searchQuery}
+            value={search}
             onChange={handleSearchChange}
           />
 
           <div
-            className="col-span-full xl:col-span-3 flex justify-between items-center"
+            className="col-span-full xl:col-span-3 flex justify-between items-center flex-col md:flex-row"
           >
             <select
               className="bg-neutral-800 cursor-pointer p-1.5"
@@ -125,11 +112,11 @@ export function UsersList() {
               <option value={ViewMode.TABLE}>Table</option>
             </select>
 
-            <Paginator
-              limit={paginationState.limit}
-              skip={paginationState.skip}
+            <UsersPaginator
+              limit={limit}
+              skip={skip}
               total={usersResponse?.total || 0}
-              onPageChange={handlePageChange}
+              onChange={handlePaginationChange}
               showAllPages={false}
             />
           </div>
