@@ -11,7 +11,13 @@ export function UsersSearch({
   value: string;
   onChange: (value: string) => void;
 }) {
-  const [searchQuery, setSearchQuery] = useState(value || '');
+  const [localSearchQuery, setLocalSearchQuery] = useState(value || '');
+  const [prevSearchQuery, setPrevSearchQuery] = useState(value || '');
+
+  if (value !== prevSearchQuery) {
+    setLocalSearchQuery(value);
+    setPrevSearchQuery(value);
+  }
 
   const debouncedOnChange = useMemo(() => debounce((newValue: string) => {
     onChange(newValue);
@@ -20,9 +26,9 @@ export function UsersSearch({
   return (
     <SearchInput
       className={className}
-      value={searchQuery}
+      value={localSearchQuery}
       onChange={(newValue) => {
-        setSearchQuery(newValue);
+        setLocalSearchQuery(newValue);
         debouncedOnChange(newValue);
       }}
     />
