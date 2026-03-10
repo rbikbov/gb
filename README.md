@@ -1,73 +1,112 @@
-# React + TypeScript + Vite
+# Users List Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React-приложение для отображения списка пользователей с поиском, пагинацией и различными режимами отображения.
 
-Currently, two official plugins are available:
+## 🚀 Запуск проекта
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Требования
+- Node.js 18+
+- npm или yarn
 
-## React Compiler
+### Установка и запуск
+```bash
+# Установить зависимости
+npm install
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Запустить в режиме разработки
+npm run dev
 
-## Expanding the ESLint configuration
+# Собрать для продакшена
+npm run build
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Запустить preview продакшен-сборки
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📋 Функциональность
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Основные возможности
+- **Поиск пользователей** с debounced-вводом
+- **Пагинация** с debounced
+- **Два режима отображения**: Grid и Table
+- **URL-синхронизация** состояния поиска и пагинации
+- **Адаптивный дизайн** для всех устройств
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Технические особенности
+- **Feature-Sliced Design (FSD)** архитектура
+- **TypeScript** для типизации
+- **Tailwind CSS** для стилизации
+- **Vite** для сборки
+- **ESLint** для контроля качества кода
+- **React Hooks** для управления состоянием
+
+## 🏗️ Структура проекта
+
 ```
+src/
+├── app/                    # Корневые компоненты и глобальные стили
+├── pages/                  # Страницы приложения
+│   └── users/              # Страница списка пользователей
+├── features/               # Фичи
+│   └── users-list/         # Фича списка пользователей
+├── entities/               # Сущности
+│   └── user/               # Сущность пользователя
+├── shared/                 # Общие ресурсы
+│   ├── ui/                 # UI компоненты
+│   ├── lib/                # Утилиты и хуки
+│   └── api/                # API типы
+```
+
+## 🛠️ Доступные скрипты
+
+```bash
+npm run dev          # Запуск dev-сервера
+npm run build        # Сборка для продакшена
+npm run preview      # Preview продакшен-сборки
+npm run lint         # Проверка ESLint
+npm run type-check   # Проверка TypeScript
+```
+
+## 🎨 UI Компоненты
+
+### Переиспользуемые компоненты
+- **SearchInput** - поле поиска с иконкой
+- **Paginator** - пагинация с эллипсисом
+- **Loader** - индикатор загрузки
+- **UserCard** - карточка пользователя
+- **UsersTable** - таблица пользователей
+
+### Кастомные хуки
+- **useUrlQuery** - управление URL параметрами
+- **debounce** - утилита для debounced-вызовов
+
+## 📱 Адаптивность
+
+- **Mobile**: 1 колонка
+- **Tablet**: 2 колонки  
+- **Desktop**: 3-4 колонки
+- **Large Desktop**: 4 колонки
+
+## 🔧 Разработка
+
+### Добавление новых компонентов
+1. Создать компонент в соответствующей директории FSD
+2. Экспортировать через index.ts
+3. Использовать TypeScript типы
+4. Следовать ESLint правилам
+
+### Стилизация
+- Использовать Tailwind CSS классы
+
+## 📦 Зависимости
+
+Основные зависимости:
+- `react` ^19.0.0
+- `react-dom` ^19.0.0  
+- `typescript` ^5.7.2
+- `tailwindcss` ^4.0.0
+- `vite` ^6.0.7
+
+## 📝 Лицензия
+
+MIT
