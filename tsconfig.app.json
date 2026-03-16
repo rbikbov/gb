@@ -19,7 +19,6 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
       "@/app/*": ["src/app/*"],
       "@/pages/*": ["src/pages/*"],
       "@/widgets/*": ["src/widgets/*"],

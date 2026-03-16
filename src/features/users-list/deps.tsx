@@ -1,5 +1,5 @@
 import { createStrictContext, useStrictContext } from "@/shared/lib/react";
-import type { UsersRepository } from "@/entities/user/model/users.repository";
+import type { UsersRepository } from "@/entities/user";
 
 type UsersListDeps = {
   getUsers: UsersRepository['getUsers'];

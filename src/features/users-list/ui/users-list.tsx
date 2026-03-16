@@ -1,10 +1,10 @@
-import type { User as UserType } from '@/entities/user/model/types';
+import type { User as UserType } from '@/entities/user';
 import { UserCard } from '@/entities/user';
 import { Loader } from '@/shared/ui';
 import { useCallback, useEffect, useState } from 'react';
 import type { ApiPaginatedResponse } from '@/shared/api';
 import { useUsersListDesp } from '../deps';
-import { useUrlQuery } from '@/shared/lib/hooks/useUrlQuery';
+import { useUrlQuery } from '@/shared/lib/hooks';
 import { UsersTable } from './users-table';
 import { UsersSearch } from './users-search';
 import { UsersPaginator } from './users-paginator';

@@ -1,4 +1,4 @@
-import { UsersResponseDtoSchema } from '@/shared/api/users';
+import { UsersResponseDtoSchema } from '@/shared/api';
 import { mapUserDtoToModel } from './users.mapper';
 import type { UsersResponse } from './types';
 

@@ -1,5 +1,5 @@
 import { usersListDepsContext } from "@/features/users-list";
-import { UsersRepository } from "@/entities/user/model/users.repository";
+import { UsersRepository } from "@/entities/user";
 
 export const UsersPageProvider = ({
   children,

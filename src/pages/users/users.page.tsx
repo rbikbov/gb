@@ -1,4 +1,4 @@
-import { UsersList } from "@/features/users-list/ui/users-list"
+import { UsersList } from "@/features/users-list"
 import { UsersPageProvider } from './users-page.provider';
 import { PageLayout } from '@/shared/ui';
 
