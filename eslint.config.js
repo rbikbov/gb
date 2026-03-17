@@ -31,189 +31,104 @@ export default defineConfig([
       },
       "boundaries/include": ["src/**/*"],
       "boundaries/elements": [
-        {
-          type: "app",
-          pattern: "app",
-        },
-        {
-          type: "pages",
-          pattern: "src/pages/*",
-          capture: ["page"],
-        },
-        {
-          type: "widgets",
-          pattern: "widgets/*",
-          capture: ["widget"],
-        },
-        {
-          type: "features",
-          pattern: "features/*",
-          capture: ["feature"],
-        },
-        {
-          type: "entities",
-          pattern: "entities/*",
-          capture: ["entity"],
-        },
-        {
-          type: "shared",
-          pattern: "shared/*",
-          capture: ["segment"],
-        },
+        { type: "app", pattern: "app" },
+        { type: "pages", pattern: "src/pages/*", capture: ["page"] },
+        { type: "widgets", pattern: "widgets/*", capture: ["widget"] },
+        { type: "features", pattern: "features/*", capture: ["feature"] },
+        { type: "entities", pattern: "entities/*", capture: ["entity"] },
+        { type: "shared", pattern: "shared/*", capture: ["segment"] },
       ],
     },
     rules: {
-      "boundaries/entry-point": [
-        2,
-        {
-          default: "disallow",
-          rules: [
-            {
-              target: [
-                [
-                  "shared",
-                  {
-                    segment: "lib",
-                  },
-                ],
-              ],
-              allow: "*/index.ts",
-            },
-            {
-              target: [
-                [
-                  "shared",
-                  {
-                    segment: "lib",
-                  },
-                ],
-              ],
-              allow: "*.(ts|tsx)",
-            },
-            {
-              target: [
-                [
-                  "shared",
-                  {
-                    segment: "constants",
-                  },
-                ],
-              ],
-              allow: "index.ts",
-            },
-            {
-              target: [
-                [
-                  "shared",
-                  {
-                    segment: "ui",
-                  },
-                ],
-              ],
-              allow: "**",
-            },
-            {
-              target: [
-                [
-                  "shared",
-                  {
-                    segment: "api",
-                  },
-                ],
-              ],
-              allow: "index.ts",
-            },
-            {
-              target: ["app", "pages", "widgets", "features", "entities"],
-              allow: "index.(ts|tsx)",
-            },
-          ],
-        },
-      ],
-      "boundaries/element-types": [
+      "boundaries/dependencies": [
         2,
         {
           default: "allow",
-          message: "${file.type} is not allowed to import (${dependency.type})",
           rules: [
+            // --- 1. Layer hierarchy (formerly element-types) ---
             {
-              from: ["shared"],
-              disallow: ["app", "pages", "widgets", "features", "entities"],
-              message:
-                "Shared module must not import upper layers (${dependency.type})",
+              from: { type: "shared" },
+              disallow: [{ to: { type: ["app", "pages", "widgets", "features", "entities"] } }],
+              message: "Shared module must not import upper layers ({{to.type}})",
             },
             {
-              from: ["entities"],
-              message: "Entity must not import upper layers (${dependency.type})",
-              disallow: ["app", "pages", "widgets", "features"],
+              from: { type: "entities" },
+              disallow: [{ to: { type: ["app", "pages", "widgets", "features"] } }],
+              message: "Entity must not import upper layers ({{to.type}})",
             },
             {
-              from: ["entities"],
+              from: { type: "entities" },
+              disallow: [{ to: { type: "entities", captured: { entity: "!{{from.captured.entity}}" } } }],
               message: "Entity must not import other entity",
-              disallow: [
-                [
-                  "entities",
-                  {
-                    entity: "!${entity}",
-                  },
-                ],
-              ],
             },
             {
-              from: ["features"],
-              message:
-                "Feature must not import upper layers (${dependency.type})",
-              disallow: ["app", "pages", "widgets"],
+              from: { type: "features" },
+              disallow: [{ to: { type: ["app", "pages", "widgets"] } }],
+              message: "Feature must not import upper layers ({{to.type}})",
             },
             {
-              from: ["features"],
+              from: { type: "features" },
+              disallow: [{ to: { type: "features", captured: { feature: "!{{from.captured.feature}}" } } }],
               message: "Feature must not import other feature",
-              disallow: [
-                [
-                  "features",
-                  {
-                    feature: "!${feature}",
-                  },
-                ],
-              ],
             },
             {
-              from: ["widgets"],
-              message:
-                "Feature must not import upper layers (${dependency.type})",
-              disallow: ["app", "pages"],
+              from: { type: "widgets" },
+              disallow: [{ to: { type: ["app", "pages"] } }],
+              message: "Widget must not import upper layers ({{to.type}})",
             },
             {
-              from: ["widgets"],
+              from: { type: "widgets" },
+              disallow: [{ to: { type: "widgets", captured: { widget: "!{{from.captured.widget}}" } } }],
               message: "Widget must not import other widget",
-              disallow: [
-                [
-                  "widgets",
-                  {
-                    widget: "!${widget}",
-                  },
-                ],
-              ],
             },
             {
-              from: ["pages"],
-              message: "Page must not import upper layers (${dependency.type})",
-              disallow: ["app"],
+              from: { type: "pages" },
+              disallow: [{ to: { type: "app" } }],
+              message: "Page must not import upper layers ({{to.type}})",
             },
             {
-              from: ["pages"],
+              from: { type: "pages" },
+              disallow: [{ to: { type: "pages", captured: { page: "!{{from.captured.page}}" } } }],
               message: "Page must not import other page",
-              disallow: [
-                [
-                  "pages",
-                  {
-                    page: "!${page}",
-                  },
-                ],
-              ],
             },
-          ]
-        }
+
+            // --- 2. Entry points (formerly entry-point) ---
+            
+            {
+              to: { 
+                type: "shared", 
+                captured: { segment: "lib" }, 
+                internalPath: "!{*.ts,*.tsx,*/index.ts}"              
+              },
+              disallow: [{ from: { type: "*" } }],
+              message: "Shared lib: only first-level files or second-level index files are allowed",
+            },
+            // Shared constants & api: strictly via index.ts
+            {
+              to: { 
+                type: "shared", 
+                captured: { segment: ["constants", "api"] }, 
+                internalPath: "!index.ts" 
+              },
+              disallow: [{ from: { type: "*" } }],
+              message: "This module can only be imported via index.ts",
+            },
+            // Shared ui: allow everything
+            {
+              to: { type: "shared", captured: { segment: "ui" } },
+              allow: [{ from: { type: "*" } }],
+            },
+            // All other layers (app, pages, etc.): strictly via root index element
+            {
+              to: { 
+                type: ["app", "pages", "widgets", "features", "entities"], 
+                internalPath: "!index.{ts,tsx}" 
+              },
+              disallow: [{ from: { type: "*" } }],
+              message: "Layers must be imported via index.(ts|tsx)",
+            },
+          ],
+        },
       ],
     },
   },
