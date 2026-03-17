@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
+
 import type { User as UserType } from '@/entities/user'
 import { UserCard } from '@/entities/user'
+
 import type { ApiPaginatedResponse } from '@/shared/api'
 import { useUrlQuery } from '@/shared/lib/hooks'
 import { Loader } from '@/shared/ui'
+
 import { useUsersListDesp } from '../deps'
 import { UsersPaginator } from './users-paginator'
 import { UsersSearch } from './users-search'

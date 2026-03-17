@@ -1,5 +1,7 @@
 import { UsersList } from '@/features/users-list'
+
 import { PageLayout } from '@/shared/ui'
+
 import { UsersPageProvider } from './users-page.provider'
 
 export function UsersPage() {

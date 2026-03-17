@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
+
 import { debounce } from '@/shared/lib/debounce'
 
 describe('debounce', () => {

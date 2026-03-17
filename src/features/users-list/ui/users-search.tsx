@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+
 import { debounce } from '@/shared/lib/debounce'
 import { SearchInput } from '@/shared/ui'
 

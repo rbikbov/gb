@@ -1,4 +1,5 @@
 import { UsersResponseDtoSchema } from '@/shared/api'
+
 import type { UsersResponse } from './types'
 import { mapUserDtoToModel } from './users.mapper'
 

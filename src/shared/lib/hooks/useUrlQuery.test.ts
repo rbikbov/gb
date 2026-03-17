@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, test } from 'vitest'
+
 import { renderHook } from '@testing-library/react'
+
 import { act } from 'react'
+
 import { useUrlQuery } from '@/shared/lib/hooks'
 
 describe('useUrlQuery', () => {

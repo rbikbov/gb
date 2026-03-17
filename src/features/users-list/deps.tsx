@@ -1,4 +1,5 @@
 import { createStrictContext, useStrictContext } from '@/shared/lib/react'
+
 import type { UsersRepository } from '@/entities/user'
 
 type UsersListDeps = {

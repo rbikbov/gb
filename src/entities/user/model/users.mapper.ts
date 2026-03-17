@@ -1,4 +1,5 @@
 import type { UserDTO } from '@/shared/api'
+
 import type { User } from './types'
 
 export const mapUserDtoToModel = (dto: UserDTO): User => ({
