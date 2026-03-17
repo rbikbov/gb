@@ -16,12 +16,13 @@
     "@testing-library/react",
     "react",
     "<THIRD_PARTY_MODULES>",
-    "^@/app",
-    "^@/pages",
-    "^@/widgets",
-    "^@/features",
-    "^@/entities",
-    "^@/shared",
+    "^@\/app",
+    "^@\/pages",
+    "^@\/widgets",
+    "^@\/features",
+    "^@\/entities",
+    "^@\/shared",
     "^[./]"
-  ]
+  ],
+  "importOrderSeparation": true
 }
