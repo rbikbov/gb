@@ -1,0 +1,3 @@
+# Ignore prettier formatting commit in git blame
+# This commit only added code formatting without functional changes
+9c89aa57adb3efc3d9f8e57162142649a7eda425
