@@ -11,7 +11,7 @@ export function SearchInput({
   onChange,
   placeholder = 'Search...',
   className = '',
-  disabled = false
+  disabled = false,
 }: SearchInputProps) {
   return (
     <div className={`relative ${className}`}>
@@ -33,7 +33,7 @@ export function SearchInput({
       <input
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
         className={`

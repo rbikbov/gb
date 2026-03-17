@@ -1,2 +1,2 @@
-export { UsersList } from './ui/users-list';
-export { usersListDepsContext, useUsersListDesp } from './deps';
+export { useUsersListDesp, usersListDepsContext } from './deps'
+export { UsersList } from './ui/users-list'

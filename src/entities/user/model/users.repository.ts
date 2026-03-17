@@ -1,16 +1,16 @@
-import { UsersResponseDtoSchema } from '@/shared/api';
-import { mapUserDtoToModel } from './users.mapper';
-import type { UsersResponse } from './types';
+import { UsersResponseDtoSchema } from '@/shared/api'
+import type { UsersResponse } from './types'
+import { mapUserDtoToModel } from './users.mapper'
 
 export interface GetUsersParams {
-  limit?: number;
-  skip?: number;
-  search?: string;
-  signal?: AbortSignal;
+  limit?: number
+  skip?: number
+  search?: string
+  signal?: AbortSignal
 }
 
 export interface UsersRepository {
-  getUsers: (params: GetUsersParams) => Promise<UsersResponse>;
+  getUsers: (params: GetUsersParams) => Promise<UsersResponse>
 }
 
 export const UsersRepository: UsersRepository = {
@@ -20,10 +20,10 @@ export const UsersRepository: UsersRepository = {
     search,
     signal,
   }: {
-    limit?: number;
-    skip?: number;
-    search?: string;
-    signal?: AbortSignal;
+    limit?: number
+    skip?: number
+    search?: string
+    signal?: AbortSignal
   } = {}) => {
     const baseURL = 'https://dummyjson.com'
     const path = search ? '/users/search' : '/users'
@@ -36,13 +36,13 @@ export const UsersRepository: UsersRepository = {
     }
 
     const response = await fetch(url.toString(), { signal })
-    const rawData = await response.json();
+    const rawData = await response.json()
 
-    const result = UsersResponseDtoSchema.safeParse(rawData);
+    const result = UsersResponseDtoSchema.safeParse(rawData)
 
     if (!result.success) {
       // e.g. log to sentry
-      throw new Error('Data validation failed');
+      throw new Error('Data validation failed')
     }
 
     return {
@@ -51,5 +51,5 @@ export const UsersRepository: UsersRepository = {
       skip: result.data.skip,
       limit: result.data.limit,
     }
-  }
+  },
 }

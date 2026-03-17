@@ -1,9 +1,8 @@
-import { UsersList } from "@/features/users-list"
-import { UsersPageProvider } from './users-page.provider';
-import { PageLayout } from '@/shared/ui';
+import { UsersList } from '@/features/users-list'
+import { PageLayout } from '@/shared/ui'
+import { UsersPageProvider } from './users-page.provider'
 
 export function UsersPage() {
-
   return (
     <UsersPageProvider>
       <PageLayout>

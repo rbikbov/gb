@@ -1,5 +1,5 @@
-import type { UserDTO } from '@/shared/api';
-import type { User } from './types';
+import type { UserDTO } from '@/shared/api'
+import type { User } from './types'
 
 export const mapUserDtoToModel = (dto: UserDTO): User => ({
   id: dto.id,
@@ -30,4 +30,4 @@ export const mapUserDtoToModel = (dto: UserDTO): User => ({
   userAgent: dto.userAgent,
   crypto: dto.crypto,
   role: dto.role,
-});
+})

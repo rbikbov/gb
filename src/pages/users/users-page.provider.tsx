@@ -1,10 +1,10 @@
-import { usersListDepsContext } from "@/features/users-list";
-import { UsersRepository } from "@/entities/user";
+import { usersListDepsContext } from '@/features/users-list'
+import { UsersRepository } from '@/entities/user'
 
 export const UsersPageProvider = ({
   children,
 }: {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }) => {
   return (
     <usersListDepsContext.Provider
@@ -14,5 +14,5 @@ export const UsersPageProvider = ({
     >
       {children}
     </usersListDepsContext.Provider>
-  );
-};
+  )
+}

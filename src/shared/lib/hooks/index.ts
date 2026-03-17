@@ -1,1 +1,1 @@
-export { useUrlQuery } from "./useUrlQuery"
+export { useUrlQuery } from './useUrlQuery'

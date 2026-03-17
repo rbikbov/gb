@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const UserDtoSchema = z.object({
   id: z.number(),
@@ -69,14 +69,14 @@ export const UserDtoSchema = z.object({
     network: z.string(),
   }),
   role: z.enum(['moderator', 'user', 'admin']),
-});
+})
 
 export const UsersResponseDtoSchema = z.object({
   users: z.array(UserDtoSchema),
   total: z.number(),
   skip: z.number(),
   limit: z.number(),
-});
+})
 
-export type UserDTO = z.infer<typeof UserDtoSchema>;
-export type UsersResponseDTO = z.infer<typeof UsersResponseDtoSchema>;
+export type UserDTO = z.infer<typeof UserDtoSchema>
+export type UsersResponseDTO = z.infer<typeof UsersResponseDtoSchema>

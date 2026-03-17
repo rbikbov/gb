@@ -1,10 +1,10 @@
-import { createStrictContext, useStrictContext } from "@/shared/lib/react";
-import type { UsersRepository } from "@/entities/user";
+import { createStrictContext, useStrictContext } from '@/shared/lib/react'
+import type { UsersRepository } from '@/entities/user'
 
 type UsersListDeps = {
-  getUsers: UsersRepository['getUsers'];
-};
+  getUsers: UsersRepository['getUsers']
+}
 
-export const usersListDepsContext = createStrictContext<UsersListDeps>();
+export const usersListDepsContext = createStrictContext<UsersListDeps>()
 
-export const useUsersListDesp = () => useStrictContext(usersListDepsContext);
+export const useUsersListDesp = () => useStrictContext(usersListDepsContext)

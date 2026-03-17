@@ -1,14 +1,34 @@
 import type { PaginatorProps } from './types'
 
 const ChevronLeftIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 19l-7-7 7-7"
+    />
   </svg>
 )
 
 const ChevronRightIcon = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M9 5l7 7-7 7"
+    />
   </svg>
 )
 
@@ -16,16 +36,19 @@ const PageButton = ({
   page,
   currentPage,
   onClick,
-  disabled = false
+  disabled = false,
 }: {
-  page: number | string;
-  currentPage: number;
-  onClick: () => void;
-  disabled?: boolean;
+  page: number | string
+  currentPage: number
+  onClick: () => void
+  disabled?: boolean
 }) => {
   if (page === '...') {
     return (
-      <span key={`ellipsis-${page}`} className="px-3 py-2 text-sm font-medium text-gray-500">
+      <span
+        key={`ellipsis-${page}`}
+        className="px-3 py-2 text-sm font-medium text-gray-500"
+      >
         ...
       </span>
     )
@@ -65,7 +88,7 @@ export function Paginator({
         skip: skip - limit,
         limit,
         oldPage: currentPage,
-        newPage: currentPage - 1
+        newPage: currentPage - 1,
       })
     }
   }
@@ -76,7 +99,7 @@ export function Paginator({
         skip: skip + limit,
         limit,
         oldPage: currentPage,
-        newPage: currentPage + 1
+        newPage: currentPage + 1,
       })
     }
   }
@@ -86,7 +109,7 @@ export function Paginator({
       skip: (page - 1) * limit,
       limit,
       oldPage: currentPage,
-      newPage: page
+      newPage: page,
     })
   }
 
@@ -143,7 +166,9 @@ export function Paginator({
   }
 
   return (
-    <div className={`flex items-center justify-between md:flex-row flex-col ${className}`}>
+    <div
+      className={`flex items-center justify-between md:flex-row flex-col ${className}`}
+    >
       <div className="text-sm text-gray-200 md:mr-4">
         Showing {skip + 1}-{Math.min(skip + limit, total)} of {total} items
       </div>
@@ -161,7 +186,9 @@ export function Paginator({
         <div className="flex space-x-1">
           {getVisiblePages().map((page, index) => (
             <PageButton
-              key={typeof page === 'number' ? page : `ellipsis-${page}-${index}`}
+              key={
+                typeof page === 'number' ? page : `ellipsis-${page}-${index}`
+              }
               page={page}
               currentPage={currentPage}
               onClick={() => typeof page === 'number' && handlePageClick(page)}

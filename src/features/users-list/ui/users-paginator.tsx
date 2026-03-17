@@ -1,7 +1,6 @@
-import { Paginator } from "@/shared/ui";
-import { useState, useMemo } from "react";
-
-import { debounce } from "@/shared/lib/debounce";
+import { useMemo, useState } from 'react'
+import { debounce } from '@/shared/lib/debounce'
+import { Paginator } from '@/shared/ui'
 
 export function UsersPaginator({
   limit,
@@ -10,35 +9,37 @@ export function UsersPaginator({
   onChange,
   showAllPages,
 }: {
-  limit: number;
-  skip: number;
-  total: number;
-  onChange: (newState: { skip: number; limit: number }) => void;
-  showAllPages: boolean;
+  limit: number
+  skip: number
+  total: number
+  onChange: (newState: { skip: number; limit: number }) => void
+  showAllPages: boolean
 }) {
-  const [localSkip, setLocalSkip] = useState(skip);
-  const [prevSkip, setPrevSkip] = useState(skip);
+  const [localSkip, setLocalSkip] = useState(skip)
+  const [prevSkip, setPrevSkip] = useState(skip)
 
   if (skip !== prevSkip) {
-    setLocalSkip(skip);
-    setPrevSkip(skip);
+    setLocalSkip(skip)
+    setPrevSkip(skip)
   }
-  const debouncedOnChange = useMemo(() => debounce((
-    newState: { skip: number; limit: number }
-  ) => {
-    onChange(newState);
-  }, 1000), [onChange]);
+  const debouncedOnChange = useMemo(
+    () =>
+      debounce((newState: { skip: number; limit: number }) => {
+        onChange(newState)
+      }, 1000),
+    [onChange]
+  )
 
   return (
     <Paginator
       limit={limit}
       skip={localSkip}
       total={total}
-      onPageChange={(newState) => {
-        setLocalSkip(newState.skip);
-        debouncedOnChange({ skip: newState.skip, limit: newState.limit });
+      onPageChange={newState => {
+        setLocalSkip(newState.skip)
+        debouncedOnChange({ skip: newState.skip, limit: newState.limit })
       }}
       showAllPages={showAllPages}
     />
-  );
+  )
 }
