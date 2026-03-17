@@ -86,11 +86,16 @@ npm run test:run
 ## 🛠️ Доступные скрипты
 
 ```bash
-npm run dev          # Запуск dev-сервера
-npm run build        # Сборка для продакшена
-npm run preview      # Preview продакшен-сборки
-npm run lint         # Проверка ESLint
-npm run type-check   # Проверка TypeScript
+npm run dev           # Запуск в режиме разработки
+npm run build         # Сборка для продакшена
+npm run preview       # Preview продакшен-сборки
+npm run lint          # Проверка ESLint
+npm run type-check    # Проверка TypeScript
+npm run test          # Запуск тестов в watch режиме
+npm run test:ui       # Запуск тестов с UI интерфейсом
+npm run test:run      # Запуск тестов единожды
+npm run format        # Форматирование кода с Prettier
+npm run format:check  # Проверка форматирования кода
 ```
 
 ## 🎨 UI Компоненты
@@ -115,11 +120,17 @@ npm run type-check   # Проверка TypeScript
 
 ## 🔧 Разработка
 
+### Код стиль и форматирование
+- **Prettier** - автоматическое форматирование кода
+- **ESLint** - проверка качества кода и FSD архитектуры
+- **Сортировка импортов** - React → npm пакеты → проектные модули
+
 ### Добавление новых компонентов
 1. Создать компонент в соответствующей директории FSD
 2. Экспортировать через index.ts
 3. Использовать TypeScript типы
 4. Следовать ESLint правилам
+5. Форматировать код с `npm run format`
 
 ### Стилизация
 - Использовать Tailwind CSS классы
