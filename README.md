@@ -90,6 +90,7 @@ npm run dev           # Запуск в режиме разработки
 npm run build         # Сборка для продакшена
 npm run preview       # Preview продакшен-сборки
 npm run lint          # Проверка ESLint
+npm run lint:css      # Проверка CSS свойств с Stylelint
 npm run type-check    # Проверка TypeScript
 npm run test          # Запуск тестов в watch режиме
 npm run test:ui       # Запуск тестов с UI интерфейсом
@@ -123,6 +124,7 @@ npm run format:check  # Проверка форматирования кода
 ### Код стиль и форматирование
 - **Prettier** - автоматическое форматирование кода
 - **ESLint** - проверка качества кода и FSD архитектуры
+- **Stylelint** - проверка и сортировка CSS свойств
 - **Сортировка импортов** - React → npm пакеты → проектные модули
 
 ### Git blame
