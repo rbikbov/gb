@@ -2,7 +2,7 @@ import { describe, expect, test, vi } from 'vitest'
 
 import { fireEvent, render } from '@testing-library/react'
 
-import { SearchInput } from '@/shared/ui/SearchInput'
+import { SearchInput } from '@/shared/ui/search-input'
 
 describe('SearchInput', () => {
   test('should render with placeholder', () => {

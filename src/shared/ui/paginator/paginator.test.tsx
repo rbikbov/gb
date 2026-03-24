@@ -2,7 +2,7 @@ import { describe, expect, test, vi } from 'vitest'
 
 import { fireEvent, render } from '@testing-library/react'
 
-import { Paginator } from '@/shared/ui/Paginator'
+import { Paginator } from '@/shared/ui/paginator'
 
 describe('Paginator', () => {
   test('should render current page information', () => {

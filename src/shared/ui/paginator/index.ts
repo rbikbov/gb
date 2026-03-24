@@ -1,2 +1,2 @@
-export { Paginator } from './Paginator'
+export { Paginator } from './paginator'
 export type { PaginationState, PaginatorProps } from './types'

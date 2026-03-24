@@ -12,7 +12,7 @@ const UserInfo = ({ label, value }: { label: string; value: string }) => (
 
 export function UserCard({ user }: UserProps) {
   return (
-    <div className="border border-gray-300 rounded-lg p-4 max-w bg-white shadow overflow-hidden">
+    <div className="border border-gray-300 rounded-lg p-4 w-full bg-white shadow overflow-hidden">
       <div className="flex items-center gap-3 mb-4">
         <img
           src={user.image}

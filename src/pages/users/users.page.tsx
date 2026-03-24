@@ -11,7 +11,7 @@ export function UsersPage() {
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-8">Users</h1>
         </div>
-        <div className="pb-4">
+        <div className="flex-1 flex flex-col">
           <UsersList />
         </div>
       </PageLayout>
