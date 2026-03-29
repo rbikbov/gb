@@ -96,6 +96,6 @@ describe('Paginator', () => {
       />
     )
 
-    expect(getAllByText('...')).toHaveLength(2) // их должно быть 2
+    expect(getAllByText('...')).toHaveLength(2)
   })
 })
