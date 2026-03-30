@@ -9,7 +9,7 @@
     "order/properties-order": [
       "position",
       "top",
-      "right", 
+      "right",
       "bottom",
       "left",
       "z-index",

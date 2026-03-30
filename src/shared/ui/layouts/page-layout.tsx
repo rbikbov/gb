@@ -6,13 +6,14 @@ export function PageLayout({
   className?: string
 }) {
   return (
-    <div
+    <main
       className={
         'container mx-auto min-h-screen m-full px-10 flex flex-col' +
         (className ? ' ' + className : '')
       }
+      role="main"
     >
       {children}
-    </div>
+    </main>
   )
 }

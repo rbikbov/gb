@@ -8,12 +8,15 @@ export function UsersPage() {
   return (
     <UsersPageProvider>
       <PageLayout>
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-8">Users</h1>
-        </div>
-        <div className="flex-1 flex flex-col">
-          <UsersList />
-        </div>
+        <header>
+          <h1 className="text-4xl font-bold mb-8 text-center">Users</h1>
+        </header>
+        <section aria-labelledby="users-list-heading" className="flex-1 flex flex-col">
+          <h2 id="users-list-heading" className="sr-only">Users List</h2>
+          <div className="flex-1 flex flex-col">
+            <UsersList />
+          </div>
+        </section>
       </PageLayout>
     </UsersPageProvider>
   )

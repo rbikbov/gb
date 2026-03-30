@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import boundaries from 'eslint-plugin-boundaries'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -18,6 +19,7 @@ export default defineConfig([
     ],
     plugins: {
       boundaries,
+      'jsx-a11y': jsxA11y,
     },
     languageOptions: {
       ecmaVersion: 2020,
@@ -93,22 +95,22 @@ export default defineConfig([
             },
 
             // --- 2. Entry points (formerly entry-point) ---
-            
+
             {
-              to: { 
-                type: "shared", 
-                captured: { segment: "lib" }, 
-                internalPath: "!{*.ts,*.tsx,*/index.ts}"              
+              to: {
+                type: "shared",
+                captured: { segment: "lib" },
+                internalPath: "!{*.ts,*.tsx,*/index.ts}"
               },
               disallow: [{ from: { type: "*" } }],
               message: "Shared lib: only first-level files or second-level index files are allowed",
             },
             // Shared constants & api: strictly via index.ts
             {
-              to: { 
-                type: "shared", 
-                captured: { segment: ["constants", "api"] }, 
-                internalPath: "!index.ts" 
+              to: {
+                type: "shared",
+                captured: { segment: ["constants", "api"] },
+                internalPath: "!index.ts"
               },
               disallow: [{ from: { type: "*" } }],
               message: "This module can only be imported via index.ts",
@@ -120,9 +122,9 @@ export default defineConfig([
             },
             // All other layers (app, pages, etc.): strictly via root index element
             {
-              to: { 
-                type: ["app", "pages", "widgets", "features", "entities"], 
-                internalPath: "!index.{ts,tsx}" 
+              to: {
+                type: ["app", "pages", "widgets", "features", "entities"],
+                internalPath: "!index.{ts,tsx}"
               },
               disallow: [{ from: { type: "*" } }],
               message: "Layers must be imported via index.(ts|tsx)",
@@ -130,6 +132,23 @@ export default defineConfig([
           ],
         },
       ],
+      // Accessibility rules - most important ones
+      "jsx-a11y/alt-text": "error",
+      "jsx-a11y/anchor-has-content": "error",
+      "jsx-a11y/anchor-is-valid": "error",
+      "jsx-a11y/heading-has-content": "error",
+      "jsx-a11y/html-has-lang": "error",
+      "jsx-a11y/img-redundant-alt": "error",
+      "jsx-a11y/label-has-associated-control": "error",
+      "jsx-a11y/no-access-key": "error",
+      "jsx-a11y/no-distracting-elements": "error",
+      "jsx-a11y/no-interactive-element-to-noninteractive-role": "error",
+      "jsx-a11y/no-noninteractive-element-interactions": "error",
+      "jsx-a11y/no-noninteractive-element-to-interactive-role": "error",
+      "jsx-a11y/no-redundant-roles": "error",
+      "jsx-a11y/role-has-required-aria-props": "error",
+      "jsx-a11y/role-supports-aria-props": "error",
+      "jsx-a11y/tabindex-no-positive": "error",
     },
   },
 ])

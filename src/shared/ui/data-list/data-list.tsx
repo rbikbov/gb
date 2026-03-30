@@ -76,7 +76,10 @@ export function DataList<T>({
         return (
           <div className={`${gridClassName}`}>
             {data.map((item, index) => (
-              <div className="flex items-stretch" key={keyExtractor(item, index)}>
+              <div
+                className="flex items-stretch"
+                key={keyExtractor(item, index)}
+              >
                 {renderItem(item, index)}
               </div>
             ))}
